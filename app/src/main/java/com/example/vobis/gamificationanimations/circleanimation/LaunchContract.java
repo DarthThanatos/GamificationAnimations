@@ -1,12 +1,17 @@
 package com.example.vobis.gamificationanimations.circleanimation;
 
 /**
- * Created by Vobis on 2017-08-14.
+ * Created by Vobis on 2017-08-14
  */
 
 interface LaunchContract {
     interface View{
         void displayProgressCircle(float progress);
+        void shiftBackgroundsAlphas(float progress);
+        void displayProgressText(String txtToDisplay);
+        void setInitialLoadingView();
+        void setFinalLoadingView();
+        void animateLoadedSuccessful();
     }
 
     interface Presenter{

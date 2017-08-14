@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/launch_container"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,9 +8,68 @@
     android:background="@drawable/tlo_launch_1_min"
     tools:context="com.example.vobis.gamificationanimations.circleanimation.LaunchActivity">
 
-    <com.example.vobis.gamificationanimations.circleanimation.CircleLoadingView
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/background_loaded"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/tlo_launch_2_min"/>
+
+    <ImageView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:src="@drawable/lago_launch" />
+
+    <RelativeLayout
+        android:id="@+id/init_loading_center"
+        android:layout_width="@dimen/smaller_circle_width"
+        android:layout_height="@dimen/smaller_circle_height"
+        android:layout_centerInParent="true">
+        <TextView
+            android:textColor="#ffffffff"
+            android:id="@+id/progress_display_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:text="%"
+            android:textColor="#ffffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/progress_display_tv"
+            android:layout_alignBottom="@+id/progress_display_tv"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffffff"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/progress_display_tv"
+            android:textSize="5sp"
+            android:text="SYSTEM INITIALIZING"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/final_loading_center"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/correctly_loaded"/>
+
+    <com.example.vobis.gamificationanimations.circleanimation.CircleInBackGround
+        android:layout_width="200dp"
+        android:layout_height="350dp"
         android:layout_centerInParent="true"/>
+
+    <com.example.vobis.gamificationanimations.circleanimation.CircleInBackGround
+        android:layout_width="@dimen/smaller_circle_width"
+        android:layout_height="@dimen/smaller_circle_height"
+        android:layout_centerInParent="true"/>
+
+    <com.example.vobis.gamificationanimations.circleanimation.CircleLoadingView
+        android:id="@+id/loading_circle"
+        android:layout_width="@dimen/smaller_circle_width"
+        android:layout_height="@dimen/smaller_circle_height"
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>

@@ -4,17 +4,13 @@ import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import static android.content.ContentValues.TAG;
-
 /**
- * Created by Vobis on 2017-08-14.
+ * Created by Vobis on 2017-08-14
  */
 
 class LaunchPresenter implements LaunchContract.Presenter {
@@ -22,7 +18,7 @@ class LaunchPresenter implements LaunchContract.Presenter {
     private LaunchContract.View view;
 
     private Disposable launchingHolderCountDownDisposable;
-    private static long ANIMATION_TIME = (5 * 1000 / 10);
+    private static final long ANIMATION_TIME = (5 * 1000 / 10);
 
     @Override
     public void attachView(LaunchContract.View view) {
@@ -43,7 +39,7 @@ class LaunchPresenter implements LaunchContract.Presenter {
 
     @Override
     public void initBusinessLogic() {
-        Log.d(TAG, "started countdown");
+        view.setInitialLoadingView();
         launchingHolderCountDownDisposable = Observable.interval(10, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -51,13 +47,17 @@ class LaunchPresenter implements LaunchContract.Presenter {
     }
 
     private boolean countDown(Long aLong) {
-        Log.d(TAG, "Got " + aLong);
-        view.displayProgressCircle((float)aLong/ANIMATION_TIME);
+        float interpolatedTime = (float)aLong/ANIMATION_TIME;
+        view.displayProgressCircle(interpolatedTime);
+        int val = (int)(interpolatedTime * 100);
+        String txtToDisplay = (val < 10 ? "0" : "") +  Integer.toString(val);
+        view.displayProgressText(txtToDisplay);
+        view.shiftBackgroundsAlphas(interpolatedTime);
         return aLong < ANIMATION_TIME;
     }
 
     private void onEnd() {
-       Log.d(TAG, "completed countdown and disposed timer");
+        view.setFinalLoadingView();
        dispose(launchingHolderCountDownDisposable);
     }
 }
