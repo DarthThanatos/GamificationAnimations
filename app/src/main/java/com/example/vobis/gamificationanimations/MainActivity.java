@@ -33,6 +33,6 @@ public class MainActivity extends AppCompatActivity {
     public void goToHomeAnimation(View view) {
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
         startActivity(intent);
-        Log.d(TAG, "yo");
+        Log.d(TAG, "yo there");
     }
 }
