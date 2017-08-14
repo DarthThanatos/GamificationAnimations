@@ -78,7 +78,7 @@ public class LaunchActivity extends AppCompatActivity implements LaunchContract.
         finalLoadingCenter.setVisibility(View.VISIBLE);
     }
 
-    private void animateSquareViewGrowth(View view, int startSize,  int endSize){
+    private void animateSquareViewGrowth(View view, int startSize,  int endSize, boolean addEndListener){
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
         ValueAnimator growingAnimator = ValueAnimator.ofInt(startSize, endSize);
         growingAnimator.setDuration(Config.GROWING_ANIMATION_TIME);
@@ -88,6 +88,15 @@ public class LaunchActivity extends AppCompatActivity implements LaunchContract.
             params.height = (int) valueAnimator.getAnimatedValue();
             view.setLayoutParams(params);
         });
+        if(addEndListener){
+            growingAnimator.addListener(new AnimationEndListener() {
+                @Override
+                public void onEnd(Animator animator) {
+                    presenter.performAPICheck();
+                    finish();
+                }
+            });
+        }
         growingAnimator.start();
     }
 
@@ -96,35 +105,22 @@ public class LaunchActivity extends AppCompatActivity implements LaunchContract.
         ValueAnimator unfadingAnimator = ObjectAnimator.ofFloat(finalLoadingCenter, "alpha", 0, 1);
         unfadingAnimator.setDuration(Config.UNFADING_ANIMATION_TIME);
         unfadingAnimator.setInterpolator(new LinearInterpolator());
-        unfadingAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
+        unfadingAnimator.addListener(new AnimationEndListener() {
 
             @Override
-            public void onAnimationEnd(Animator animator) {
+            public  void onEnd(Animator animator) {
                 int biggerCircleWidth = (int) getResources().getDimension(R.dimen.bigger_circle_width);
                 int startCircleSize = (int) getResources().getDimension(R.dimen.smaller_circle_width);
                 int endCircleSize = startCircleSize + (int) (biggerCircleWidth - startCircleSize) / 4;
                 int startFinalCenterSize = (int) getResources().getDimension(R.dimen.loading_center_width);
                 int endFinalCenterSize = startFinalCenterSize + (int) (endCircleSize/(Math.sqrt(2)) - startFinalCenterSize) / 4;
 
-                animateSquareViewGrowth(smallerBackgroundCircle, startCircleSize, endCircleSize);
-                animateSquareViewGrowth(circleLoadingView, startCircleSize, endCircleSize);
-                animateSquareViewGrowth(finalLoadingCenter, startFinalCenterSize, endFinalCenterSize);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
+                animateSquareViewGrowth(smallerBackgroundCircle, startCircleSize, endCircleSize, false);
+                animateSquareViewGrowth(circleLoadingView, startCircleSize, endCircleSize, false);
+                animateSquareViewGrowth(finalLoadingCenter, startFinalCenterSize, endFinalCenterSize, true);
             }
         });
+
         unfadingAnimator.start();
     }
 }

@@ -44,6 +44,11 @@ class LaunchPresenter implements LaunchContract.Presenter {
                 .forEachWhile(this::countDown , Throwable::printStackTrace, this::onEnd);
     }
 
+    @Override
+    public void performAPICheck() {
+
+    }
+
     private boolean countDown(Long aLong) {
         float interpolatedTime = (float)aLong/ANIMATION_TIME;
         view.displayProgressCircle(interpolatedTime);

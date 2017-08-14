@@ -18,6 +18,6 @@ interface LaunchContract {
         void attachView(View view);
         void detachView();
         void initBusinessLogic();
-
+        void performAPICheck();
     }
 }
