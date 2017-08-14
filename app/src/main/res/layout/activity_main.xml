@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    tools:context="com.example.vobis.gamificationanimations.MainActivity">
+
+    <Button
+        android:id="@+id/launch_transit"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:onClick="goToLaunchAnimation"
+        android:text="GO TO LAUNCH"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/list_anim_transit"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:onClick="goToListAnimation"
+        android:layout_centerHorizontal="true"
+        android:text="GO TO LIST ANIM"
+        android:layout_below="@+id/launch_transit"/>
+
+    <Button
+        android:id="@+id/home_anim_transit"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:onClick="goToHomeAnimation"
+        android:layout_centerHorizontal="true"
+        android:text="GO TO HOME ANIM"
+        android:layout_below="@+id/list_anim_transit"/>
+
+</RelativeLayout>
