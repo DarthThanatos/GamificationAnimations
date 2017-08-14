@@ -1,13 +1,18 @@
 package com.example.vobis.gamificationanimations.circleanimation;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.vobis.gamificationanimations.R;
+import com.example.vobis.gamificationanimations.config.Config;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,6 +26,7 @@ public class LaunchActivity extends AppCompatActivity implements LaunchContract.
     @BindView(R.id.background_loaded) ImageView backgroundLoaded;
     @BindView(R.id.init_loading_center) RelativeLayout initLoadingCenter;
     @BindView(R.id.final_loading_center) ImageView finalLoadingCenter;
+    @BindView(R.id.smaller_background_circle) CircleInBackGround smallerBackgroundCircle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +57,8 @@ public class LaunchActivity extends AppCompatActivity implements LaunchContract.
 
 
     @Override
-    public void shiftBackgroundsAlphas(float progress) {
-//        launchContainer.getBackground().setAlpha((int) (255 * (1 - progress)));
-        backgroundLoaded.setAlpha(255 * progress);
+    public void shiftBackgroundAlpha(float progress) {
+        backgroundLoaded.setAlpha(progress);
     }
 
     @Override
@@ -73,8 +78,53 @@ public class LaunchActivity extends AppCompatActivity implements LaunchContract.
         finalLoadingCenter.setVisibility(View.VISIBLE);
     }
 
+    private void animateSquareViewGrowth(View view, int startSize,  int endSize){
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
+        ValueAnimator growingAnimator = ValueAnimator.ofInt(startSize, endSize);
+        growingAnimator.setDuration(Config.GROWING_ANIMATION_TIME);
+        growingAnimator.setInterpolator(new LinearInterpolator());
+        growingAnimator.addUpdateListener(valueAnimator -> {
+            params.width = (int) valueAnimator.getAnimatedValue();
+            params.height = (int) valueAnimator.getAnimatedValue();
+            view.setLayoutParams(params);
+        });
+        growingAnimator.start();
+    }
+
     @Override
     public void animateLoadedSuccessful() {
+        ValueAnimator unfadingAnimator = ObjectAnimator.ofFloat(finalLoadingCenter, "alpha", 0, 1);
+        unfadingAnimator.setDuration(Config.UNFADING_ANIMATION_TIME);
+        unfadingAnimator.setInterpolator(new LinearInterpolator());
+        unfadingAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                int biggerCircleWidth = (int) getResources().getDimension(R.dimen.bigger_circle_width);
+                int startCircleSize = (int) getResources().getDimension(R.dimen.smaller_circle_width);
+                int endCircleSize = startCircleSize + (int) (biggerCircleWidth - startCircleSize) / 4;
+                int startFinalCenterSize = (int) getResources().getDimension(R.dimen.loading_center_width);
+                int endFinalCenterSize = startFinalCenterSize + (int) (endCircleSize/(Math.sqrt(2)) - startFinalCenterSize) / 4;
+
+                animateSquareViewGrowth(smallerBackgroundCircle, startCircleSize, endCircleSize);
+                animateSquareViewGrowth(circleLoadingView, startCircleSize, endCircleSize);
+                animateSquareViewGrowth(finalLoadingCenter, startFinalCenterSize, endFinalCenterSize);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        unfadingAnimator.start();
     }
 }

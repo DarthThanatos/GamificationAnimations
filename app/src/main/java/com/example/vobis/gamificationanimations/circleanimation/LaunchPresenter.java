@@ -1,7 +1,5 @@
 package com.example.vobis.gamificationanimations.circleanimation;
 
-import android.util.Log;
-
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -52,12 +50,13 @@ class LaunchPresenter implements LaunchContract.Presenter {
         int val = (int)(interpolatedTime * 100);
         String txtToDisplay = (val < 10 ? "0" : "") +  Integer.toString(val);
         view.displayProgressText(txtToDisplay);
-        view.shiftBackgroundsAlphas(interpolatedTime);
+        view.shiftBackgroundAlpha(interpolatedTime);
         return aLong < ANIMATION_TIME;
     }
 
     private void onEnd() {
         view.setFinalLoadingView();
-       dispose(launchingHolderCountDownDisposable);
+        view.animateLoadedSuccessful();
+        dispose(launchingHolderCountDownDisposable);
     }
 }

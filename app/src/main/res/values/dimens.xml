@@ -2,4 +2,8 @@
 <resources>
     <dimen name="smaller_circle_width">150dp</dimen>
     <dimen name="smaller_circle_height">300dp</dimen>
+    <dimen name="bigger_circle_width">200dp</dimen>
+    <dimen name="bigger_circle_height">350dp</dimen>
+    <dimen name="loading_center_width">85dp</dimen>
+    <dimen name="loading_center_height">85dp</dimen>
 </resources>

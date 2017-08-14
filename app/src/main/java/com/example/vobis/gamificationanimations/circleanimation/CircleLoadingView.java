@@ -39,17 +39,6 @@ public class CircleLoadingView extends View {
         rect = new RectF();
     }
 
-    @Override
-    public void onMeasure(int widthSpec, int heightSpec){
-        super.onMeasure(widthSpec, heightSpec);
-        rect.set(
-                strokeWidth,
-                getHeight()/2 - getWidth()/2,
-                getWidth() - strokeWidth,
-                getHeight()/2 + getWidth()/2
-        );
-    }
-
     public void displayProgress(float interpolatedTime){
         angle = oldAngle + ((newAngle - oldAngle) * interpolatedTime);
         invalidate();
@@ -58,6 +47,13 @@ public class CircleLoadingView extends View {
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
+
+        rect.set(
+                strokeWidth,
+                getHeight()/2 - getWidth()/2 + strokeWidth,
+                getWidth() - strokeWidth,
+                getHeight()/2 + getWidth()/2 - strokeWidth
+        );
 //        canvas.drawLine(0, 0, getWidth() + correction, 0, linesPaint);
 //        canvas.drawLine(getWidth() + correction, 0, getWidth() + correction, getHeight() + correction, linesPaint);
 //        canvas.drawLine(getWidth() + correction, getHeight() + correction, 0, getHeight() + correction, linesPaint);

@@ -7,7 +7,7 @@ package com.example.vobis.gamificationanimations.circleanimation;
 interface LaunchContract {
     interface View{
         void displayProgressCircle(float progress);
-        void shiftBackgroundsAlphas(float progress);
+        void shiftBackgroundAlpha(float progress);
         void displayProgressText(String txtToDisplay);
         void setInitialLoadingView();
         void setFinalLoadingView();

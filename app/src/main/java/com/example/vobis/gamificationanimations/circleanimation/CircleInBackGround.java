@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * Created by Vobis on 2017-08-14.
+ * Created by Vobis on 2017-08-14
  */
 
 public class CircleInBackGround extends View {
@@ -35,19 +35,15 @@ public class CircleInBackGround extends View {
     }
 
     @Override
-    public void onMeasure(int widthSpec, int heightSpec){
-        super.onMeasure(widthSpec, heightSpec);
-        rect.set(
-                strokeWidth,
-                getHeight()/2 - getWidth()/2,
-                getWidth() - strokeWidth,
-                getHeight()/2 + getWidth()/2
-        );
-    }
-
-    @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
+
+        rect.set(
+                strokeWidth,
+                getHeight()/2 - getWidth()/2 + strokeWidth,
+                getWidth() - strokeWidth,
+                getHeight()/2 + getWidth()/2 - strokeWidth
+        );
 //        canvas.drawLine(0, 0, getWidth() + correction, 0, linesPaint);
 //        canvas.drawLine(getWidth() + correction, 0, getWidth() + correction, getHeight() + correction, linesPaint);
 //        canvas.drawLine(getWidth() + correction, getHeight() + correction, 0, getHeight() + correction, linesPaint);
