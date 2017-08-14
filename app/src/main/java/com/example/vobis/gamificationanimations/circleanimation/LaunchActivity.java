@@ -18,10 +18,15 @@ public class LaunchActivity extends AppCompatActivity implements LaunchContract.
     }
 
     private void initPresenter(){
-        if(presenter != null) presenter.detachView();
         presenter = new LaunchPresenter();
         presenter.attachView(this);
         presenter.initBusinessLogic();
+    }
+
+    @Override
+    public void onDestroy(){
+        if(presenter != null) presenter.detachView();
+        super.onDestroy();
     }
 
     @Override

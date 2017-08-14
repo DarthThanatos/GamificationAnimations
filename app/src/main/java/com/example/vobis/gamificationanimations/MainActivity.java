@@ -6,9 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.annimon.stream.Stream;
 import com.example.vobis.gamificationanimations.circleanimation.LaunchActivity;
 import com.example.vobis.gamificationanimations.homeanimation.HomeActivity;
 import com.example.vobis.gamificationanimations.listanimation.ListAnimationActivity;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +22,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        List<String> list = Arrays.asList("Yo", "Null", "Robo");
+        Log.d(TAG, "Hello world");
+        Stream<String> stream = Stream.of(list)
+                .filter(value -> !value.equals("Null"));
+        Log.d(TAG, "stream count: " + stream.count());
+        stream.forEach(s -> Log.d(TAG, "-> " + s));
     }
 
     public void goToLaunchAnimation(View view) {
@@ -33,6 +43,5 @@ public class MainActivity extends AppCompatActivity {
     public void goToHomeAnimation(View view) {
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
         startActivity(intent);
-        Log.d(TAG, "yo there");
     }
 }
