@@ -1,8 +1,6 @@
 package com.example.vobis.gamificationanimations.retrofit;
 
-import com.example.vobis.gamificationanimations.listanimation.FeedItem;
-
-import java.util.List;
+import com.example.vobis.gamificationanimations.listanimation.FeedContainer;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -14,7 +12,7 @@ import retrofit2.http.Query;
 
 public interface AnimationsService {
 
-    @GET("category_posts")
-    Observable<List<FeedItem>> getFeedItems(@Query("slug") String slug, @Query("count") int count);
+    @GET("/")
+    Observable<FeedContainer> getFeedItems(@Query("json") String json, @Query("slug") String slug, @Query("count") int count);
 
 }
