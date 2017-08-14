@@ -10,12 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -27,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -40,8 +35,7 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
     private List<FeedItem> feedItemList;
     private Context context;
 
-    private final int paddingUnit = 150;
-    private final int moveUnit = 8;
+    private final int paddingUnit = 125;
 
     ListAnimationViewAdapter(Context context, List<FeedItem> feedItemList) {
         this.feedItemList = feedItemList;
@@ -74,6 +68,7 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
 
     private boolean countDownAnimation(Long aLong, ListAnimationViewHolder holder) {
         int padding = ((RecyclerView.LayoutParams)holder.rootView.getLayoutParams()).leftMargin;
+        int moveUnit = 10;
         int moveStep = Math.min(padding, moveUnit);
 
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)(holder.rootView).getLayoutParams();
