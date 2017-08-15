@@ -40,6 +40,7 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
     ListAnimationViewAdapter(Context context, List<FeedItem> feedItemList) {
         this.feedItemList = feedItemList;
         this.context = context;
+        Log.d(TAG, "init list adapter");
     }
 
     @Override
