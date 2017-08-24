@@ -10,6 +10,7 @@ import com.annimon.stream.Stream;
 import com.example.vobis.gamificationanimations.circleanimation.LaunchActivity;
 import com.example.vobis.gamificationanimations.homeanimation.HomeActivity;
 import com.example.vobis.gamificationanimations.listanimation.ListAnimationActivity;
+import com.example.vobis.gamificationanimations.websockets_example.WebSocketActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToHomeAnimation(View view) {
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToWebsocket(View view) {
+        Intent intent = new Intent(MainActivity.this, WebSocketActivity.class);
         startActivity(intent);
     }
 }

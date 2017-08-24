@@ -33,4 +33,13 @@
         android:text="GO TO HOME ANIM"
         android:layout_below="@+id/list_anim_transit"/>
 
+    <Button
+        android:id="@+id/websocket_transit"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:onClick="goToWebsocket"
+        android:layout_centerHorizontal="true"
+        android:text="GO TO WEBSOCKET"
+        android:layout_below="@+id/home_anim_transit"/>
+
 </RelativeLayout>
