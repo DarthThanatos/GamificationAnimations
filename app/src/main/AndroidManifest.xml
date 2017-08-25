@@ -3,7 +3,7 @@
     package="com.example.vobis.gamificationanimations">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +22,8 @@
         <activity android:name=".circleanimation.LaunchActivity" />
         <activity android:name=".listanimation.ListAnimationActivity" />
         <activity android:name=".homeanimation.HomeActivity" />
-        <activity android:name=".websockets_example.WebSocketActivity"/>
+        <activity android:name=".websockets_example.WebSocketActivity" />
+        <activity android:name=".websockets_okhttp.WebsocketOkHttpActivity"></activity>
     </application>
 
 </manifest>

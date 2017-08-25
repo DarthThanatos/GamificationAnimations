@@ -9,7 +9,7 @@
 
     <Button
         android:id="@+id/launch_transit"
-        android:layout_width="150dp"
+        android:layout_width="@dimen/transit_button_width"
         android:layout_height="wrap_content"
         android:onClick="goToLaunchAnimation"
         android:text="GO TO LAUNCH"
@@ -17,7 +17,7 @@
 
     <Button
         android:id="@+id/list_anim_transit"
-        android:layout_width="150dp"
+        android:layout_width="@dimen/transit_button_width"
         android:layout_height="wrap_content"
         android:onClick="goToListAnimation"
         android:layout_centerHorizontal="true"
@@ -26,7 +26,7 @@
 
     <Button
         android:id="@+id/home_anim_transit"
-        android:layout_width="150dp"
+        android:layout_width="@dimen/transit_button_width"
         android:layout_height="wrap_content"
         android:onClick="goToHomeAnimation"
         android:layout_centerHorizontal="true"
@@ -35,11 +35,20 @@
 
     <Button
         android:id="@+id/websocket_transit"
-        android:layout_width="150dp"
+        android:layout_width="@dimen/transit_button_width"
         android:layout_height="wrap_content"
         android:onClick="goToWebsocket"
         android:layout_centerHorizontal="true"
         android:text="GO TO WEBSOCKET"
         android:layout_below="@+id/home_anim_transit"/>
+
+    <Button
+        android:id="@+id/ok_websocket_transit"
+        android:layout_width="@dimen/transit_button_width"
+        android:layout_height="wrap_content"
+        android:onClick="goToOkWebsocket"
+        android:layout_centerHorizontal="true"
+        android:text="GO TO OKHTTPWEBSOCKET"
+        android:layout_below="@+id/websocket_transit"/>
 
 </RelativeLayout>

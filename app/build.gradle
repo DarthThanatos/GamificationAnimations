@@ -74,9 +74,10 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.android.support:cardview-v7:26.+'
     compile 'com.squareup.okhttp3:logging-interceptor:+'
+    compile 'com.nihaskalam.android:socket-connections:1.0.0'
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC1'
-    compile 'com.nihaskalam.android:socket-connections:1.0.0'
-
 }
