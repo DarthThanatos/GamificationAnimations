@@ -6,6 +6,7 @@ package com.example.vobis.gamificationanimations.config;
 
 public class Config {
     public static final String ENDPOINT = "http://stacktips.com";
+    public static final int NORMAL_CLOSURE_STATUS = 1000;
     public static final int EVERY_TEN_MILLIS = 10;
     public static final int TIME_UNIT = 1000;
     public static final int GROWING_ANIMATION_TIME = TIME_UNIT;

@@ -7,14 +7,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.WebSocket;
 
 import com.example.vobis.gamificationanimations.R;
+import com.example.vobis.gamificationanimations.config.Config;
 
 public class WebsocketOkHttpActivity extends AppCompatActivity implements OnWebSocketOutput {
 
     private TextView output;
     private OkHttpClient client;
     private static final String TAG = WebsocketOkHttpActivity.class.getSimpleName();
+    private WebSocket gameInnWebSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +33,23 @@ public class WebsocketOkHttpActivity extends AppCompatActivity implements OnWebS
         output = (TextView) findViewById(R.id.output);
     }
 
+    private void closeGameInnWebSocket(){
+        if(gameInnWebSocket != null) gameInnWebSocket.close(Config.NORMAL_CLOSURE_STATUS, null);
+    }
+
+    @Override
+    public void onDestroy(){
+        closeGameInnWebSocket();
+        super.onDestroy();
+    }
+
     private void startGameInning() {
-        Request request = new Request.Builder().url("https://gameinn.sosoftware.pl/akka/rankings/updates/").build();
+        String apiURL = "http://192.168.0.51:8080/rankings/updates"; //"https://gameinn.sosoftware.pl/akka/rankings/updates";
+        Request request = new Request.Builder().url(apiURL).build();
         GameInnWebSocketListener gameInnWebSocketListener = new GameInnWebSocketListener(this);
         client = new OkHttpClient();
-        client.newWebSocket(request, gameInnWebSocketListener);
+        closeGameInnWebSocket();
+        gameInnWebSocket = client.newWebSocket(request, gameInnWebSocketListener);
         client.dispatcher().executorService().shutdown();
     }
 
