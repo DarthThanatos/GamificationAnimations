@@ -28,18 +28,34 @@ public class WebSocketActivity extends AppCompatActivity {
     ConnectionEventListener connectionEventListener = new ConnectionEventListener() {
         @Override
         public void onConnectionStateChange(ConnectionStateChange change) {
-            Log.i("WebsocketConnection", String.format("[%d] Connection state changed from [%s] to [%s]", timestamp(),
+            Log.i("Web socket Connection", String.format("[%1$s] Connection state changed from [%2$s] to [%3$s]", Long.toString(timestamp()),
                     change.getPreviousState(), change.getCurrentState()));
-            doDisplay(String.format("[%d] Connection state changed from [%s] to [%s]", timestamp(),
+            doDisplay(String.format("[%1$s] Connection state changed from [%2$s] to [%3$s]", Long.toString(timestamp()),
                     change.getPreviousState(), change.getCurrentState()));
         }
 
         @Override
         public void onError(String message, String code, Exception e) {
-            Log.i("WebsocketConnection", String.format("[%d] An error was received with message [%s], code [%s], exception [%s]",
+            Log.i("Web socket Connection", String.format("[%d] An error was received with message [%s], code [%s], exception [%s]",
                     timestamp(), message, code, e));
-            doDisplay(String.format("[%d] An error was received with message [%s], code [%s], exception [%s]",
-                    timestamp(), message, code, e));
+            doDisplay(String.format("[%1$s] An error was received with message [%2$s], code [%3$s], exception [%4$s]",
+                    Long.toString(timestamp()), message, code, e));
+        }
+    };
+
+    ChannelEventListener channelEventListener = new ChannelEventListener() {
+        @Override
+        public void onSubscriptionSucceeded(String channelName) {
+            Log.i("channelSubscription", String.format("[%1$s] Subscription to channel [%2$s] succeeded", Long.toString(timestamp()), channelName));
+            doDisplay(String.format("[%1$s] Subscription to channel [%2$s] succeeded", Long.toString(timestamp()), channelName));
+        }
+
+        @Override
+        public void onEvent(String channelName, String eventName, String data) {
+            Log.i("ReceivedEventData:", String.format("[%d] Received event [%s] on channel [%s] with data [%s]", timestamp(),
+                    eventName, channelName, data));
+            doDisplay(String.format("[%1$s] Received event [%2$s] on channel [%3$s] with data [%4$s]", Long.toString(timestamp()),
+                    eventName, channelName, data));
         }
     };
 
@@ -51,53 +67,38 @@ public class WebSocketActivity extends AppCompatActivity {
         QSocketOptions options = new QSocketOptions().setAuthorizationToken("1234567890").setEncrypted(false);
         qSocket = new QSocket(options, this);
 
-        connect(dataTV);
-//        subscribeChannel(dataTV);
+        connect();
+        subscribeChannel(dataTV);
     }
 
 
     @Override
     public void onDestroy(){
         Log.d(TAG, "On destroy");
-//        disconnect(dataTV);
-//        unsubscribeChannel(dataTV);
+        unsubscribeChannel();
+        disconnect();
         shouldContinue = false;
+        Log.d(TAG, "before super on destroy");
         super.onDestroy();
+        Log.d(TAG, "after super on destroy");
     }
 
-    public void connect(View view) {
+    public void connect() {
         qSocket.connect(connectionEventListener, ConnectionState.ALL);
     }
 
-    public void disconnect(View view) {
+    public void disconnect() {
         qSocket.disconnect();
     }
 
     public void subscribeChannel(View view) {
-        channel = qSocket.subscribe("Channel B", new ChannelEventListener() {
-            @Override
-            public void onSubscriptionSucceeded(String channelName) {
-                Log.i("channelSubscription", String.format("[%d] Subscription to channel [%s] succeeded", timestamp(), channelName));
-                doDisplay(String.format("[%d] Subscription to channel [%s] succeeded", timestamp(), channelName));
-            }
-
-            @Override
-            public void onEvent(String channelName, String eventName, String data) {
-                Log.i("ReceivedEventData:", String.format("[%d] Received event [%s] on channel [%s] with data [%s]", timestamp(),
-                        eventName, channelName, data));
-                doDisplay(String.format("[%d] Received event [%s] on channel [%s] with data [%s]", timestamp(),
-                        eventName, channelName, data));
-            }
-        });
+        channel = qSocket.subscribe("Channel B", channelEventListener);
     }
 
-    public void unsubscribeChannel(View view) {
-        qSocket.unsubscribe("Channel B", new ChannelUnsubscriptionEventListener() {
-            @Override
-            public void onUnsubscribed(String channelName) {
-                Log.i("channelUnsubscription", String.format("[%d] Unsubscription to channel [%s] succeeded", timestamp(), channelName));
-                doDisplay(String.format("[%d] Unsubscription to channel [%s] succeeded", timestamp(), channelName));
-            }
+    public void unsubscribeChannel() {
+        qSocket.unsubscribe("Channel B", channelName -> {
+            Log.i("channelUnsubscription", String.format("[%d] Unsubscription to channel [%s] succeeded", timestamp(), channelName));
+            doDisplay(String.format("[%1$s] Unsubscription to channel [%2$s] succeeded", Long.toString(timestamp()), channelName));
         });
     }
 
@@ -106,11 +107,6 @@ public class WebSocketActivity extends AppCompatActivity {
     }
 
     private void doDisplay(final String data) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                dataTV.setText(data);
-            }
-        });
+        runOnUiThread(() -> dataTV.setText(data));
     }
 }
