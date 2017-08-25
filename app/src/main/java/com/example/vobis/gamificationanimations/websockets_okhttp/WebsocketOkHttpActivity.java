@@ -12,21 +12,33 @@ import com.example.vobis.gamificationanimations.R;
 
 public class WebsocketOkHttpActivity extends AppCompatActivity implements OnWebSocketOutput {
 
-    private Button start;
     private TextView output;
     private OkHttpClient client;
     private static final String TAG = WebsocketOkHttpActivity.class.getSimpleName();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_websocket_ok_http);
-        start = (Button) findViewById(R.id.start_echo);
+
+        Button startEcho = (Button) findViewById(R.id.start_echo);
+        startEcho.setOnClickListener(view -> startEchoing());
+
+        Button startGameInn = (Button) findViewById(R.id.start_gameinn);
+        startGameInn.setOnClickListener(view -> startGameInning());
+
         output = (TextView) findViewById(R.id.output);
-        start.setOnClickListener(view -> start());
     }
-    private void start() {
+
+    private void startGameInning() {
+        Request request = new Request.Builder().url("https://gameinn.sosoftware.pl/akka/rankings/updates/").build();
+        GameInnWebSocketListener gameInnWebSocketListener = new GameInnWebSocketListener(this);
+        client = new OkHttpClient();
+        client.newWebSocket(request, gameInnWebSocketListener);
+        client.dispatcher().executorService().shutdown();
+    }
+
+    private void startEchoing() {
         Request request = new Request.Builder().url("ws://echo.websocket.org").build();
         EchoWebSocketListener listener = new EchoWebSocketListener(this);
         client = new OkHttpClient();
