@@ -27,8 +27,6 @@ class EchoWebSocketListener extends WebSocketListener {
         webSocket.send("What's up ?");
         Log.d(TAG, "sending deadbeef");
         webSocket.send(ByteString.decodeHex("deadbeef"));
-        Log.d(TAG, "closing with notmal closure status & msg goodbye");
-        webSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye!");
     }
     @Override
     public void onMessage(WebSocket webSocket, String text) {
@@ -43,7 +41,6 @@ class EchoWebSocketListener extends WebSocketListener {
     @Override
     public void onClosing(WebSocket webSocket, int code, String reason) {
         Log.d(TAG, "Closing : " + code + " / " + reason);
-        webSocket.close(NORMAL_CLOSURE_STATUS, null);
         onWebSocketOutput.output("Closing : " + code + " / " + reason);
     }
     @Override

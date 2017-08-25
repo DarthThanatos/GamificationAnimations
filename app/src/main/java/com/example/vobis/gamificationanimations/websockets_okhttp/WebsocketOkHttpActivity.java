@@ -18,6 +18,7 @@ public class WebsocketOkHttpActivity extends AppCompatActivity implements OnWebS
     private OkHttpClient client;
     private static final String TAG = WebsocketOkHttpActivity.class.getSimpleName();
     private WebSocket gameInnWebSocket;
+    private WebSocket echoWebSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +38,14 @@ public class WebsocketOkHttpActivity extends AppCompatActivity implements OnWebS
         if(gameInnWebSocket != null) gameInnWebSocket.close(Config.NORMAL_CLOSURE_STATUS, null);
     }
 
+    private void closeEchoSocket(){
+        if(echoWebSocket != null) echoWebSocket.close(Config.NORMAL_CLOSURE_STATUS, null);
+    }
+
     @Override
     public void onDestroy(){
         closeGameInnWebSocket();
+        closeEchoSocket();
         super.onDestroy();
     }
 
@@ -57,7 +63,8 @@ public class WebsocketOkHttpActivity extends AppCompatActivity implements OnWebS
         Request request = new Request.Builder().url("ws://echo.websocket.org").build();
         EchoWebSocketListener listener = new EchoWebSocketListener(this);
         client = new OkHttpClient();
-        client.newWebSocket(request, listener);
+        closeEchoSocket();
+        echoWebSocket = client.newWebSocket(request, listener);
         client.dispatcher().executorService().shutdown();
     }
 
