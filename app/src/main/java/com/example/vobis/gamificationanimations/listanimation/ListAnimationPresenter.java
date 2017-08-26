@@ -44,7 +44,7 @@ public class ListAnimationPresenter implements ListAnimationContract.Presenter {
         view.showProgress();
         networkingDisposable = new RetrofitProvider()
                 .getAnimationsService()
-                .getFeedItems("get_category_posts","news", 10)
+                .getFeedItems("get_category_posts","news", 20)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::feedView, Throwable::printStackTrace);

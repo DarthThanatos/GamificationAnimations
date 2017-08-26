@@ -44,6 +44,7 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
 
     private Disposable[] disposables;
     private boolean scrolledDown = true;
+    private static final int MAX_ANIMATED_POSITIONS = 5;
 
     ListAnimationViewAdapter(Context context, List<FeedItem> feedItemList) {
         this.feedItemList = feedItemList;
@@ -68,7 +69,8 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
     }
 
     private void animatePositionEntranceWithAnimation(ListAnimationViewHolder holder, int position){
-        int startOffset = (scrolledDown ? position : feedItemList.size() - position) * Config.LIST_ITEM_ENTRANCE_ANIMATION_TIME / 4;
+        if( position >= MAX_ANIMATED_POSITIONS - 1) {holder.rootView.setVisibility(View.VISIBLE); return;}
+        int startOffset = (scrolledDown ? position : MAX_ANIMATED_POSITIONS - position) * Config.LIST_ITEM_ENTRANCE_ANIMATION_TIME / 4;
         Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in);
         animation.setStartOffset(startOffset);
         animation.setDuration(Config.LIST_ITEM_ENTRANCE_ANIMATION_TIME);
@@ -82,6 +84,11 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
             Log.d(TAG, "disposing " + position);
             disposable.dispose();
         }
+        else{
+            if(disposable!=null){
+                Log.d(TAG, "disposable " + position + " already disposed");
+            }
+        }
     }
 
     private boolean imagesBelowLoaded(int position) {
@@ -90,19 +97,21 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
 
     private void checkInBackgroundIfAllImagesBelowLoadedThenAnimate(ListAnimationViewHolder holder){
         int position = holder.getAdapterPosition();
+        if(position < 0) return; //position index can be invalid at this point
         dispose(position);
         disposables[position] = Observable.interval(10, TimeUnit.MILLISECONDS)
             .forEachWhile(aLong -> positionNotReadyToAnimate(position),Throwable::printStackTrace,() -> onAllLoaded(holder));
     }
 
     private void onAllLoaded(ListAnimationViewHolder holder) {
+        if(holder.getAdapterPosition() < 0) return; //position index can be invalid at this point
         dispose(holder.getAdapterPosition());
         ((Activity)context).runOnUiThread(() -> animatePositionEntranceWithAnimation(holder, holder.getAdapterPosition()));
     }
 
 
     private boolean positionNotReadyToAnimate(int position) {
-        if (position == 0) return false;
+        if (position <= 0) return false;
         Log.d(TAG, "position: " + position + ", not all loaded, array: ");
         printArrayUntilPosition(position);
         return !imagesBelowLoaded(position);
@@ -134,11 +143,21 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
         .listener(new ResourceReadyListener() {
             @Override
             void reactOnResourceReady() {
-                imagesAlreadyLoaded[holder.getAdapterPosition()] = Boolean.TRUE;
-                checkInBackgroundIfAllImagesBelowLoadedThenAnimate(holder);
+                onImageLoaded(holder);
             }
         })
         .into(holder.imageView);
+    }
+
+    private void onImageLoaded(ListAnimationViewHolder holder){
+        imagesAlreadyLoaded[holder.getAdapterPosition()] = Boolean.TRUE;
+        if(holder.getAdapterPosition() < 0) return; // position index can be invalid at this point
+        if(holder.getAdapterPosition() < MAX_ANIMATED_POSITIONS && scrolledDown){
+            checkInBackgroundIfAllImagesBelowLoadedThenAnimate(holder);
+        }
+        else{
+            holder.rootView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
