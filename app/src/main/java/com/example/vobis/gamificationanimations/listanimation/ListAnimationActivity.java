@@ -35,10 +35,10 @@ public class ListAnimationActivity extends AppCompatActivity implements ListAnim
         presenter.initBusinessLogic();
     }
 
-
     @Override
     public void onDestroy(){
         if(presenter!=null) presenter.detachView();
+        ((ListAnimationViewAdapter)recyclerView.getAdapter()).disposeAll();
         super.onDestroy();
     }
 
