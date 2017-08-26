@@ -42,9 +42,8 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
     private Boolean[] imagesAlreadyLoaded;
     private Context context;
 
-    private final int paddingUnit = 125;
-
     private Disposable[] disposables;
+    private boolean scrolledDown = true;
 
     ListAnimationViewAdapter(Context context, List<FeedItem> feedItemList) {
         this.feedItemList = feedItemList;
@@ -69,7 +68,7 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
     }
 
     private void animatePositionEntranceWithAnimation(ListAnimationViewHolder holder, int position){
-        int startOffset = position * Config.LIST_ITEM_ENTRANCE_ANIMATION_TIME / 4;
+        int startOffset = (scrolledDown ? position : feedItemList.size() - position) * Config.LIST_ITEM_ENTRANCE_ANIMATION_TIME / 4;
         Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in);
         animation.setStartOffset(startOffset);
         animation.setDuration(Config.LIST_ITEM_ENTRANCE_ANIMATION_TIME);
@@ -78,17 +77,15 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
     }
 
     private void dispose(int position){
-        Disposable disposable = disposables[position];
+        Disposable disposable = ListAnimationViewAdapter.this.disposables[position];
         if(disposable != null && !disposable.isDisposed()){
             Log.d(TAG, "disposing " + position);
             disposable.dispose();
         }
     }
 
-    private boolean imagesBelowLoaded(int position){
-        return Stream.of(imagesAlreadyLoaded)
-                .filterIndexed((index, value) -> index < position)
-                .allMatch(value -> value);
+    private boolean imagesBelowLoaded(int position) {
+        return !scrolledDown || Stream.of(imagesAlreadyLoaded).filterIndexed((index, value) -> index < position).allMatch(value -> value);
     }
 
     private void checkInBackgroundIfAllImagesBelowLoadedThenAnimate(ListAnimationViewHolder holder){
@@ -127,11 +124,11 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
         holder.rootView.setVisibility(View.GONE);
         holder.textView.setText(Html.fromHtml(feedItem.getTitle() + " [" +holder.getAdapterPosition() +"]" ));
         if (!TextUtils.isEmpty(feedItem.getThumbnail())) {
-            loadImageThenAnimateEntrance(holder, feedItem);
+            loadImageThenTryAnimatingEntrance(holder, feedItem);
         }
     }
 
-    private void loadImageThenAnimateEntrance(ListAnimationViewHolder holder, FeedItem feedItem){
+    private void loadImageThenTryAnimatingEntrance(ListAnimationViewHolder holder, FeedItem feedItem){
         Glide.with(context)
         .load(feedItem.getThumbnail())
         .listener(new ResourceReadyListener() {
@@ -151,6 +148,10 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
 
     void disposeAll() {
         Stream.range(0, disposables.length).forEach(this::dispose);
+    }
+
+    void reactOnScrollDirectionChange(int dy) {
+        scrolledDown = dy >= 0;
     }
 
     class ListAnimationViewHolder extends RecyclerView.ViewHolder{

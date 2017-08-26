@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -16,6 +17,7 @@ import butterknife.ButterKnife;
 
 public class ListAnimationActivity extends AppCompatActivity implements ListAnimationContract.View {
 
+    private static final String TAG = ListAnimationActivity.class.getSimpleName();
     ListAnimationContract.Presenter presenter;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
@@ -45,6 +47,7 @@ public class ListAnimationActivity extends AppCompatActivity implements ListAnim
     @Override
     public void displayFeedItems(List<FeedItem> feedItems) {
         ListAnimationViewAdapter listAnimationViewAdapter = new ListAnimationViewAdapter(this, feedItems);
+        recyclerView.addOnScrollListener(new OnScrollDirectionChangeListener(listAnimationViewAdapter));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(listAnimationViewAdapter);
 
@@ -58,5 +61,19 @@ public class ListAnimationActivity extends AppCompatActivity implements ListAnim
     @Override
     public void hideProgress() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    private class OnScrollDirectionChangeListener extends RecyclerView.OnScrollListener {
+        private ListAnimationViewAdapter listAnimationViewAdapter;
+
+        OnScrollDirectionChangeListener(ListAnimationViewAdapter listAnimationViewAdapter){
+            this.listAnimationViewAdapter = listAnimationViewAdapter;
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            listAnimationViewAdapter.reactOnScrollDirectionChange(dy);
+        }
     }
 }
