@@ -55,5 +55,6 @@ public class MainActivity extends AppCompatActivity {
     public void goToOkWebsocket(View view) {
         Intent intent = new Intent(MainActivity.this, WebsocketOkHttpActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.activity_in_animation, R.anim.activity_out_animation);
     }
 }
