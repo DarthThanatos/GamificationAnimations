@@ -23,6 +23,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.vobis.gamificationanimations.R;
+import com.example.vobis.gamificationanimations.commonviews.ResourceReadyListener;
 import com.example.vobis.gamificationanimations.config.Config;
 
 import java.util.List;
@@ -70,10 +71,10 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
 
     private void animatePositionEntranceWithAnimation(ListAnimationViewHolder holder, int position){
         if( position >= MAX_ANIMATED_POSITIONS - 1) {holder.rootView.setVisibility(View.VISIBLE); return;}
-        int startOffset = (scrolledDown ? position : MAX_ANIMATED_POSITIONS - position) * Config.LIST_ITEM_ENTRANCE_ANIMATION_TIME / 4;
+        int startOffset = (scrolledDown ? position : MAX_ANIMATED_POSITIONS - position) * Config.ENTRANCE_ANIMATION_TIME / 4;
         Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in);
         animation.setStartOffset(startOffset);
-        animation.setDuration(Config.LIST_ITEM_ENTRANCE_ANIMATION_TIME);
+        animation.setDuration(Config.ENTRANCE_ANIMATION_TIME);
         holder.rootView.setVisibility(View.VISIBLE);
         holder.rootView.startAnimation(animation);
     }
@@ -142,7 +143,7 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
         .load(feedItem.getThumbnail())
         .listener(new ResourceReadyListener() {
             @Override
-            void reactOnResourceReady() {
+            protected void reactOnResourceReady() {
                 onImageLoaded(holder);
             }
         })
@@ -186,19 +187,5 @@ class ListAnimationViewAdapter extends RecyclerView.Adapter<ListAnimationViewAda
         }
     }
 
-    private abstract class ResourceReadyListener implements RequestListener<Drawable> {
-        @Override
-        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-            return false;
-        }
-
-        @Override
-        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-            reactOnResourceReady();
-            return false;
-        }
-
-        abstract void reactOnResourceReady();
-    }
 
 }

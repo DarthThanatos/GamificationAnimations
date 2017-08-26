@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.vobis.gamificationanimations.R;
+import com.example.vobis.gamificationanimations.commonviews.AnimatorEndListener;
 import com.example.vobis.gamificationanimations.config.Config;
 
 import butterknife.BindView;
@@ -89,7 +90,7 @@ public class LaunchActivity extends AppCompatActivity implements LaunchContract.
             view.setLayoutParams(params);
         });
         if(addEndListener){
-            growingAnimator.addListener(new AnimationEndListener() {
+            growingAnimator.addListener(new AnimatorEndListener() {
                 @Override
                 public void onEnd(Animator animator) {
                     presenter.performAPICheck();
@@ -105,7 +106,7 @@ public class LaunchActivity extends AppCompatActivity implements LaunchContract.
         ValueAnimator unfadingAnimator = ObjectAnimator.ofFloat(finalLoadingCenter, "alpha", 0, 1);
         unfadingAnimator.setDuration(Config.UNFADING_ANIMATION_TIME);
         unfadingAnimator.setInterpolator(new LinearInterpolator());
-        unfadingAnimator.addListener(new AnimationEndListener() {
+        unfadingAnimator.addListener(new AnimatorEndListener() {
 
             @Override
             public  void onEnd(Animator animator) {

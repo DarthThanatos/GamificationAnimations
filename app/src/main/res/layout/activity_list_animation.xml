@@ -9,11 +9,20 @@
     android:padding="12dp"
     tools:context="com.example.vobis.gamificationanimations.listanimation.ListAnimationActivity">
 
+    <ImageView
+        android:id="@+id/logo"
+        android:src="@drawable/logo_logowanie"
+        android:background="#ffff0000"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:adjustViewBounds="true"
+        android:visibility="gone"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"/>
+        android:layout_below="@+id/logo"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"

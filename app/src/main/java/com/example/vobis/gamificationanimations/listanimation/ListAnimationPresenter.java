@@ -53,6 +53,6 @@ public class ListAnimationPresenter implements ListAnimationContract.Presenter {
     private void feedView(FeedContainer feedContainer) {
         Stream.of(feedContainer.getPosts()).forEach(feedItem -> Log.d(TAG, feedItem.toString()));
         view.hideProgress();
-        view.displayFeedItems(feedContainer.getPosts());
+        view.animateEntrance(feedContainer.getPosts());
     }
 }

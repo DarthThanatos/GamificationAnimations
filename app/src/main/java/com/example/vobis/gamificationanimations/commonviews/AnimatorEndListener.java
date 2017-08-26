@@ -1,4 +1,4 @@
-package com.example.vobis.gamificationanimations.circleanimation;
+package com.example.vobis.gamificationanimations.commonviews;
 
 
 import android.animation.Animator;
@@ -7,7 +7,7 @@ import android.animation.Animator;
  * Created by Vobis on 2017-08-14
  */
 
-public abstract class AnimationEndListener implements Animator.AnimatorListener {
+public abstract class AnimatorEndListener implements Animator.AnimatorListener {
 
     public abstract void onEnd(Animator animator);
 

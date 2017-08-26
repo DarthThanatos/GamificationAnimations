@@ -4,11 +4,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.example.vobis.gamificationanimations.R;
+import com.example.vobis.gamificationanimations.commonviews.AnimationEndListener;
+import com.example.vobis.gamificationanimations.config.Config;
 
 import java.util.List;
 
@@ -19,6 +23,7 @@ public class ListAnimationActivity extends AppCompatActivity implements ListAnim
 
     private static final String TAG = ListAnimationActivity.class.getSimpleName();
     ListAnimationContract.Presenter presenter;
+    @BindView(R.id.logo) ImageView logo;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
 
@@ -45,7 +50,24 @@ public class ListAnimationActivity extends AppCompatActivity implements ListAnim
     }
 
     @Override
-    public void displayFeedItems(List<FeedItem> feedItems) {
+    public void animateEntrance(List<FeedItem> feedItems){
+        animateLogoThenList(feedItems);
+    }
+
+    private void animateLogoThenList(List<FeedItem> feedItems){
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.slide_up);
+        animation.setDuration(Config.ENTRANCE_ANIMATION_TIME);
+        animation.setAnimationListener(new AnimationEndListener() {
+            @Override
+            protected void onEnd(Animation animation) {
+                displayFeedItems(feedItems);
+            }
+        });
+        logo.setVisibility(View.VISIBLE);
+        logo.startAnimation(animation);
+    }
+
+    private void displayFeedItems(List<FeedItem> feedItems) {
         ListAnimationViewAdapter listAnimationViewAdapter = new ListAnimationViewAdapter(this, feedItems);
         recyclerView.addOnScrollListener(new OnScrollDirectionChangeListener(listAnimationViewAdapter));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

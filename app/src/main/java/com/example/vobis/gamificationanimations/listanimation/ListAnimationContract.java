@@ -8,9 +8,9 @@ import java.util.List;
 
 interface ListAnimationContract {
     interface View{
-        void displayFeedItems(List<FeedItem> feedItems);
         void showProgress();
         void hideProgress();
+        void animateEntrance(List<FeedItem> feedItems);
     }
 
     interface Presenter{
