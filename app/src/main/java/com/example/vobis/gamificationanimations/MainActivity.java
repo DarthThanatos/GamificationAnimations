@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.annimon.stream.Stream;
 import com.example.vobis.gamificationanimations.circleanimation.LaunchActivity;
+import com.example.vobis.gamificationanimations.commonviews.ActivitySwitcher;
 import com.example.vobis.gamificationanimations.homeanimation.HomeActivity;
 import com.example.vobis.gamificationanimations.listanimation.ListAnimationActivity;
 import com.example.vobis.gamificationanimations.websockets_example.WebSocketActivity;
@@ -32,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
         stream.forEach(s -> Log.d(TAG, "-> " + s));
     }
 
+    @Override
+    public void onResume(){
+        ActivitySwitcher.animationIn(findViewById(R.id.container), getWindowManager());
+        super.onResume();
+    }
+
     public void goToLaunchAnimation(View view) {
         Intent intent = new Intent(MainActivity.this, LaunchActivity.class);
         startActivity(intent);
@@ -43,8 +50,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToHomeAnimation(View view) {
-        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-        startActivity(intent);
+        final Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        ActivitySwitcher.animationOut(findViewById(R.id.container), getWindowManager(), () -> startActivity(intent));
     }
 
     public void goToWebsocket(View view) {

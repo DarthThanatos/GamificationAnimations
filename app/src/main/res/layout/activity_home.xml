@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.vobis.gamificationanimations.homeanimation.HomeActivity">
+    tools:context="com.example.vobis.gamificationanimations.homeanimation.HomeActivity"
+    android:background="@drawable/tlo_launch_1_min"
+    android:id="@+id/container">
 
 </RelativeLayout>
